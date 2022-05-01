@@ -1,0 +1,4 @@
+build
+cube_workspace/.metadata
+cube_workspace/STM32F405RG/.*
+cube_workspace/STM32F405RG/Debug
