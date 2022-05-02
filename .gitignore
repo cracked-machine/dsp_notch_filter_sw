@@ -2,3 +2,5 @@ build
 cube_workspace/.metadata
 cube_workspace/STM32F405RG/.*
 cube_workspace/STM32F405RG/Debug
+# STM32CubeF4 drivers are imported as separate submodule in "extern/stm32_cube_f4" dir
+cube_workspace/STM32F405RG/Drivers  

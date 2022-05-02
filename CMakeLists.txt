@@ -37,7 +37,7 @@ add_executable(${BUILD_NAME} "")
 # add common sources
 add_subdirectory(Application) 
 add_subdirectory(cube_workspace)   
-# add_subdirectory(extern/embedded_utils)
+add_subdirectory(segger_rtt)
 
 
 # add the stm32-specific sources for the embedded build

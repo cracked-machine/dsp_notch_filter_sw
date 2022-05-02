@@ -22,11 +22,14 @@
 
 
 #include "mainapp.hpp"
-#include "gpio.h"
-// #include <static_map.hpp>
-#include <I2SManager.hpp>
-#include <i2s.h>
 
+#include <I2SManager.hpp>
+
+#include <gpio.h>
+#include <i2s.h>
+#include <tim.h>
+
+#include <SEGGER_RTT.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -35,13 +38,16 @@ extern "C"
 
 void mainapp()
 {	
+	SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL);
+
+	HAL_Delay(1000);
 	I2SManager i2s_manager(hi2s2);	
 	i2s_manager.start_i2s_dma();
-
+	// HAL_TIM_Base_Start_IT(&htim14);
+	
 	while(true)
 	{
-		HAL_GPIO_TogglePin(RelayCoilOut_GPIO_Port, RelayCoilOut_Pin);
-		HAL_Delay(5000);
+		
 		HAL_GPIO_TogglePin(LEDA_Red_GPIO_Port, LEDA_Red_Pin);
 		HAL_Delay(5000);
 	}
