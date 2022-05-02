@@ -29,13 +29,16 @@ endif()
 # include(cmake/cppcheck.cmake)
 
 # Declare the project 
-project(STEP_SEQUENCER VERSION 0.1 DESCRIPTION "STEP_SEQUENCER")
+project(NOTCH_FILTER VERSION 0.1 DESCRIPTION "NOTCH_FILTER")
 
 # set the executable target
 add_executable(${BUILD_NAME} "")
 
 # add common sources
-add_subdirectory(Application)    
+add_subdirectory(Application) 
+add_subdirectory(cube_workspace)   
+# add_subdirectory(extern/embedded_utils)
+
 
 # add the stm32-specific sources for the embedded build
 if(TARGET_TYPE STREQUAL ARM)
@@ -43,8 +46,8 @@ if(TARGET_TYPE STREQUAL ARM)
     endif()
        
     # link in STM32CubeHAL static lib
-    add_subdirectory(cube_workspace)
-    target_link_libraries(${BUILD_NAME} PUBLIC STM32CubeHAL)
+    add_subdirectory(extern/stm32_cube_f4)
+    target_link_libraries(${BUILD_NAME} PUBLIC STM32CubeLib)
     target_include_directories(${BUILD_NAME} PUBLIC
         "${PROJECT_BINARY_DIR}"
         "${PROJECT_SOURCE_DIR}/stm32cube_workspace")

@@ -46,7 +46,7 @@ add_compile_definitions(${TARGET} USE_FULL_LL_DRIVER)
 
 # used to include stm32g0xx.h dependency (and maybe stm32g0xx LL)
 add_compile_definitions(
-    ${TARGET} STM32G0B1xx
+    ${TARGET} STM32F405xx
 )
 
 message("CMAKE_CXX_FLAGS_DEBUG:" ${CMAKE_CXX_FLAGS_DEBUG})

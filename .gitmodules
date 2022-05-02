@@ -1,3 +1,3 @@
-[submodule "extern/embedded_utils"]
-	path = extern/embedded_utils
-	url = https://github.com/cracked-machine/embedded_utils.git
+[submodule "extern/stm32_cube_f4"]
+	path = extern/stm32_cube_f4
+	url = https://github.com/STMicroelectronics/STM32CubeF4.git
