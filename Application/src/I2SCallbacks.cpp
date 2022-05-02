@@ -20,42 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
-#include "mainapp.hpp"
-#include "gpio.h"
-// #include <static_map.hpp>
-#include <I2SManager.hpp>
-#include <i2s.h>
+#include <I2SCallbacks.hpp>
 
 
-#ifdef __cplusplus
-extern "C"
+void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s)
 {
-#endif
-
-void mainapp()
-{	
-	I2SManager i2s_manager(hi2s2);	
-	i2s_manager.start_i2s_dma();
-
-	while(true)
-	{
-		HAL_GPIO_TogglePin(RelayCoilOut_GPIO_Port, RelayCoilOut_Pin);
-		HAL_Delay(5000);
-		HAL_GPIO_TogglePin(LEDA_Red_GPIO_Port, LEDA_Red_Pin);
-		HAL_Delay(5000);
-	}
-
+    if (I2SCallbacks::m_callback_handlers[
+        static_cast<int>(I2SCallbacks::Types::HAL_I2SEx_TxRxHalfCpltCallback)
+        ] != nullptr)
+    {
+        I2SCallbacks::m_callback_handlers[
+            static_cast<int>(I2SCallbacks::Types::HAL_I2SEx_TxRxHalfCpltCallback)
+        ]->callback();
+    }
 }
 
-void error_handler()
+void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s)
 {
-	while(true)
-	{
-
-	}
+    if (I2SCallbacks::m_callback_handlers[
+        static_cast<int>(I2SCallbacks::Types::HAL_I2SEx_TxRxCpltCallback)
+        ] != nullptr)
+    {
+        I2SCallbacks::m_callback_handlers[
+            static_cast<int>(I2SCallbacks::Types::HAL_I2SEx_TxRxCpltCallback)
+        ]->callback();
+    }
 }
-
-#ifdef __cplusplus
-}
-#endif

@@ -21,41 +21,43 @@
 // SOFTWARE.
 
 
-#include "mainapp.hpp"
-#include "gpio.h"
-// #include <static_map.hpp>
-#include <I2SManager.hpp>
-#include <i2s.h>
+#ifndef __STATIC_MAP_HPP__
+#define __STATIC_MAP_HPP__
 
+#include <array>
 
-#ifdef __cplusplus
-extern "C"
+// @brief For working example see https://godbolt.org/z/deza1Ecnn
+
+namespace noarch::containers
 {
-#endif
 
-void mainapp()
-{	
-	I2SManager i2s_manager(hi2s2);	
-	i2s_manager.start_i2s_dma();
+// @brief Associative container with contains key-value pairs that is allocated at compile-time
+// @tparam Key The Key
+// @tparam Value The Value
+// @tparam Size The size of the map/number of Key/Value pairs. Must be constant.
+template <typename Key, typename Value, std::size_t Size>
+struct StaticMap {
+    
+    // @brief The dictionary
+    std::array<std::pair<Key, Value>, Size> data;
 
-	while(true)
-	{
-		HAL_GPIO_TogglePin(RelayCoilOut_GPIO_Port, RelayCoilOut_Pin);
-		HAL_Delay(5000);
-		HAL_GPIO_TogglePin(LEDA_Red_GPIO_Port, LEDA_Red_Pin);
-		HAL_Delay(5000);
-	}
+    // @brief access specified element
+    // @param key The key element to match
+    // @return Value* Pointer to the value element, or nullptr if not found
+    Value* find_key(const Key &key) {
 
-}
+        for (std::pair<Key, Value> &pair : data)
+        {
+            if (pair.first == key)
+            {
+                return &pair.second;
+            }
+        }
+        // or return nullptr as the search completed without match
+        return nullptr;
+    }
+};
 
-void error_handler()
-{
-	while(true)
-	{
+} // namespace noarch::containers
 
-	}
-}
-
-#ifdef __cplusplus
-}
-#endif
+#endif // __STATIC_MAP_HPP__

@@ -20,42 +20,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#ifndef __I2SCALLBACKS_HPP__
+#define __I2SCALLBACKS_HPP__
 
-#include "mainapp.hpp"
-#include "gpio.h"
-// #include <static_map.hpp>
-#include <I2SManager.hpp>
-#include <i2s.h>
+#include <array>
+#include <cstdint>
+#include <stm32f4xx_hal.h>
 
-
-#ifdef __cplusplus
-extern "C"
+class I2SCallbacks
 {
-#endif
+public:
 
-void mainapp()
-{	
-	I2SManager i2s_manager(hi2s2);	
-	i2s_manager.start_i2s_dma();
+    enum class Types
+    {
+        HAL_I2SEx_TxRxHalfCpltCallback,
+        HAL_I2SEx_TxRxCpltCallback,
+        capacity,   // special type to get the max size. Do not select as an interrupt vector!
+    };
 
-	while(true)
-	{
-		HAL_GPIO_TogglePin(RelayCoilOut_GPIO_Port, RelayCoilOut_Pin);
-		HAL_Delay(5000);
-		HAL_GPIO_TogglePin(LEDA_Red_GPIO_Port, LEDA_Red_Pin);
-		HAL_Delay(5000);
-	}
+    virtual void callback() = 0;
 
-}
+    static inline std::array<I2SCallbacks*, static_cast<std::size_t>(Types::capacity)> m_callback_handlers;
 
-void error_handler()
-{
-	while(true)
-	{
+    void register_handler(Types callback_type, I2SCallbacks *handler)
+    {
+        if (m_callback_handlers[static_cast<int>(callback_type)] == nullptr)
+        {
+            m_callback_handlers[static_cast<int>(callback_type)] = handler;
+        }
+        else
+        {
+            while(true) { /* something went wrong assigning the handler */ }
+        }
+    }
 
-	}
-}
+};
 
-#ifdef __cplusplus
-}
-#endif
+#endif // __I2SCALLBACKS_HPP__

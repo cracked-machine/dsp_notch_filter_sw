@@ -20,42 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
-#include "mainapp.hpp"
-#include "gpio.h"
-// #include <static_map.hpp>
 #include <I2SManager.hpp>
-#include <i2s.h>
 
-
-#ifdef __cplusplus
-extern "C"
+I2SManager::I2SManager(I2S_HandleTypeDef &hi2s2) : m_hi2s2(hi2s2)
 {
-#endif
-
-void mainapp()
-{	
-	I2SManager i2s_manager(hi2s2);	
-	i2s_manager.start_i2s_dma();
-
-	while(true)
-	{
-		HAL_GPIO_TogglePin(RelayCoilOut_GPIO_Port, RelayCoilOut_Pin);
-		HAL_Delay(5000);
-		HAL_GPIO_TogglePin(LEDA_Red_GPIO_Port, LEDA_Red_Pin);
-		HAL_Delay(5000);
-	}
-
+    
 }
 
-void error_handler()
+HAL_StatusTypeDef I2SManager::start_i2s_dma()
 {
-	while(true)
-	{
-
-	}
+    return HAL_I2SEx_TransmitReceive_DMA (&m_hi2s2, m_tx_buffer.data(), m_rx_buffer.data(), 4);
 }
 
-#ifdef __cplusplus
+void I2SManager::i2s_half_complete_transfer_action()
+{
+
 }
-#endif
+void I2SManager::i2s_full_complete_transfer_action()
+{
+
+}
